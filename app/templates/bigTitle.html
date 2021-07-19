@@ -1,0 +1,13 @@
+
+    {% load static %}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 affix text-center" style="z-index: 1;">
+        <h1 class="templatemo-site-title">
+            <!--居中大标题，字号h1-->
+            <a>
+                <p style="color: #eeeeee;font-family: 华文行楷;font-size: 65px">{{ brand }}车型分析数据</p>  <!--默认是第一个奥迪-->
+            </a>
+            <!--如果当前页面窗口过小，则显示菜单按钮-->
+            <img src="{% static 'images/btn-menu.png' %}" alt="main menu" id="m-btn" class="pull-right visible-xs visible-sm" >
+        </h1>
+        <ul id="responsive" style="display:none" class="hidden-lg hidden-md"></ul><!-- /.responsive -->
+    </div>

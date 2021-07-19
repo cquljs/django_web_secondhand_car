@@ -1,0 +1,268 @@
+{% load static %}
+<section id="home-text" class="active templatemo-content-section">
+    <h3 class="text-center" style="font-family: 华文行楷;color: black;font-size: 30px;">{{ brand }}品牌二手车售价价格区间图</h3>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <!--整体二手车售价价格区间数量图-->
+        <div id="main1" style="width: 500px;height:300px;"></div>
+        <script>
+            var myChart1 = echarts.init(document.getElementById('main1'))
+            var option = {
+                color: ['#ffd700'], <!--柱状图颜色-->
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '15%',   //如果X轴看不到单位就往上调百分比
+                    bottom: '3%',
+                    containLabel: true
+                },
+                title: {
+
+                    top: 0,
+                    left: 'center'
+                },
+                xAxis: [ <!--x轴-->
+                    {
+                        name: '(万元)',
+                        type: 'category',
+                        data: ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-89', '90-99', '≥100'], //X轴值，可以随便改
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis: [ <!--y轴-->
+                    {
+                        name: '车辆数(台)',
+                        type: 'value',
+                    }
+                ],
+                series: [ <!--浮动框-->
+                    {
+                        name: '售出车辆数',
+                        type: 'bar',
+                        barWidth: '60%',
+                        data: {{ price_distribution }}   //每一个数据依次对应纵坐标的值
+                    }
+                ]
+            };
+            //
+            myChart1.setOption(option);
+        </script>
+        {#                                <div id="main1" style="width: 600px;height:300px;"></div>#}
+    </div>
+</section><!-- /.home-text -->
+
+<section id="about-text" class="inactive">
+    <h3 class="text-center" style="font-family: 华文行楷;color:black">{{ brand }}车龄-保值率关系图</h3>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <tr>
+            <th>
+                <div id="main2" style="width: 500px;height:300px"></div>
+            </th>
+        </tr>
+        <script>
+            var myChart2 = echarts.init(document.getElementById('main2'))
+            var option = {
+                color: ['#dda0dd'],
+                title: {
+                    left: 'center'
+                },
+                xAxis: {<!--格式同第一部分的script基本一致-->
+                    name: '车龄\n(年)',
+                    type: 'category',
+                    boundaryGap: false,
+                    data: {{xlabel2}}
+                },
+                yAxis: {
+                    name: '保值率',
+                    type: 'value'
+                },
+                series: [{
+                    data: {{ hedge_ratio }},
+                    type: 'line',
+                    areaStyle: {}
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart2.setOption(option);
+        </script>
+    </div>
+
+</section><!-- /.about-text -->
+
+<section id="services-text" class="inactive">
+    <h3 class="text-center" style="font-family: 华文行楷;color:black;font-size: 30px">{{ brand }}不同出厂年份的车的销售量</h3>
+    <div class="col-sm-6 col-md-6">
+        <div id="main3" style="width: 500px;height:300px;" align="center"></div>
+        <script>
+            var myChart3 = echarts.init(document.getElementById('main3'))
+            var option = {
+                color: ['#7cfc00'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '8%',   //如果X轴看不到单位就往上调百分比
+                    bottom: '3%',
+                    containLabel: true
+                },
+                title: {
+                    left: 'center'
+                },
+                xAxis: [
+                    {
+                        name: '出厂\n年份',    //改横坐标单位
+                        type: 'category',
+                        data: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'], //X轴值，可以随便改
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        name: '车辆数(台)',  //改纵坐标单位
+                        type: 'value',
+                    }
+                ],
+                series: [
+                    {
+                        name: '售出车辆数',
+                        type: 'bar',
+                        barWidth: '60%',
+                        data: {{ mannufactured_year }}   //每一个数据依次对应纵坐标的值
+                    }
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart3.setOption(option);
+        </script>
+    </div>
+</section><!-- /.services-text -->
+
+<section id="testimonial-text" class="inactive">
+    <h3 class="text-center" style="font-family: 华文行楷;color:black;font-size: 30px;">不同车龄的车在{{ brand }}中的销售量占比</h3>
+    <div class="col-sm-6 col-md-6">
+        <th>
+            <div id="main4" style="width: 300px;height:200px;"></div>
+        </th>
+        <script>
+            var values =
+            {{num_categorized_by_year}}
+
+            var myChart4 = echarts.init(document.getElementById('main4'))
+            var option = {
+                {#backgroundColor: '#2c343c',#}
+
+                title: {
+
+                    left: 'center',
+                    top: 0,
+                    textStyle: {
+                        color: 'ff0000',
+                    }
+                },
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+
+                visualMap: {
+                    show: false,
+                    min: 10,
+                    max: 350, <!--颜色深度-->
+                    inRange: {
+                        colorLightness: [0, 2]
+                    }
+                },
+                series: [
+                    {
+                        name: '数量占比',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: [
+                            {value: values[0], name: '0'},
+                            {value: values[1], name: '1'},
+                            {value: values[2], name: '2'},
+                            {value: values[3], name: '3'},
+                            {value: values[4], name: '4'},
+                            {value: values[5], name: '5'},
+                            {value: values[6], name: '6'},
+                            {value: values[7], name: '7'},
+                            {value: values[8], name: '8'},
+                            {value: values[9], name: '9'}
+                        ].sort(function (a, b) {
+                            return a.value - b.value;
+                        }),
+                        {#roseType: 'radius',#}
+                        label: {
+                            color: 'rgba(25, 25, 112, 0.8)'
+                        },
+                        labelLine: {
+                            lineStyle: {
+                                color: 'rgba(25, 25, 112, 0.7)'
+                            },
+                            smooth: 0.2,
+                            length: 10,
+                            length2: 20
+                        },
+                        itemStyle: {
+                            color: '#c23531',
+                            shadowBlur: 200,
+                            shadowColor: 'rgba(0, 200, 100, 0.3)'
+                        },
+
+                        animationType: 'scale',
+                        animationEasing: 'elasticOut',
+                        animationDelay: function (idx) {
+                            return Math.random() * 200;
+                        }
+                    }
+                ]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart4.setOption(option);
+        </script>
+    </div>
+    <div class="col-sm-6 col-md-6">
+        <p>标签代表<a style="color: red">车龄（年）</a>，鼠标或触屏指向不同饼块即可<a style="color: red">查看其所占比例</a>。</p>
+        <p style="font-family: 'Times New Roman'">The label represents the vehicle age (years), and you can view its
+            proportion by pointing the mouse or touch screen at different parts of pie chart.</p>
+    </div>
+</section><!-- /.testimonial-text -->
+
+                        <section id="contact-text" class="inactive">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12"><h2 style="font-family: 'Times New Roman';color: black;font-size: 30px">About Team</h2></div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="row">
+                                    <!--底部-->
+                                    <div class="col-sm-12 col-md-12">
+                                        <p><b style="color: black">项目概述：</b><a style="color: black">江流有声二手车大数据分析平台由重庆大学计算机学院2018级本科生江流有声团队完成，
+                                            <b style="color: gold">我们致力于为用户提供多元的二手车分析数据</b>。其中使用到的图片素材、css和js素材归原作者所有。</a></p>
+                                        <br>
+                                        <p ><b style="color: black">团队成员：</b><a style="color: black">甘雁、刘建铄、董瀚文、潘振宇、王先吉、袁正、储瑾辰、陈适航</a></p>
+                                        <p><b style="color: black">数据支持：</b><a style="color: black">服务器和数据库平台由阿里云提供支持。</a></p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </section><!-- /.contact-text -->

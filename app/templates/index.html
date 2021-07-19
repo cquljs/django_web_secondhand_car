@@ -1,0 +1,699 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta name="description" content="html 5 template">
+<meta name="author" content="chinaz.com">
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="../../static/js/echarts.min.js"></script>
+<script src="../../static/js/echarts-wordcloud.js"></script>
+{% load static %}
+<title>江流有声二手车大数据分析平台</title>
+    <link rel="shortcut icon" href="{% static 'assets/images/logo1.ico' %}">
+<!-- Bootstrap core CSS -->
+<link href="{% static 'assets/css/plugins/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/plugins/jquery.smartmenus.bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/plugins/nivo-slider.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/plugins/swiper.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/plugins/intlTelInput.min.css' %}" rel="stylesheet" >
+<link href="{% static 'assets/css/plugins/remodal.min.css' %}" rel="stylesheet" >
+<link href="{% static 'assets/css/plugins/animate.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/main-style.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/table.css' %}" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<!-- Icon Font-->
+<link href="{% static 'iconfont/style.css' %}" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+
+    <script>
+        function jumpToCarInfo(str) {
+            $.ajax({ // 先用post请求调用draw_all()，将brand存入cookie
+                type: "POST",
+                url: "/app/details/",
+                async: true,
+                data: {'brandname':str},
+                success: function(){
+                    window.location = '/app/details/' // 再用get请求调用draw_all()，并重定向到details页面
+                },
+                error:function(err){
+                }
+            });
+        }
+    </script>
+
+</head>
+
+<body class="page__home">
+<!-- Loader -->
+<div class="plash">
+<div id="scene">
+	<span></span>
+	<div id="road">
+		<div id="stripes"></div>
+	</div>
+</div>
+<div class="loading">Loading<span>...</span></div>
+</div>
+<!-- //Loader -->
+<!-- Header -->
+<header class="site-header">
+		<div class="mobile-top-panel"></div>
+	<div class="mobile-top-panel__fixed">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="menu-navigation navbar-collapse collapse">
+
+				<!-- Left nav -->
+					<ul class="menu-navigation__list nav navbar-nav">
+						<li><a href="index.html">Home</a></li>
+					</ul>
+
+				</div><!--/.nav-collapse -->
+			</div>
+			<div class="social-list">
+				<span class="social-list__text">联系我们:</span>
+				<ul class="social-list__icons">
+					<li><a href="https://www.facebook.com/"><i class="icon-facebook-logo"></i></a></li>
+					<li><a href="https://twitter.com/"><i class="icon-twitter-letter-logo"></i></a></li>
+					<li><a href="https://google.com/"><i class="icon-google-plus"></i></a></li>
+					<li><a href="https://www.linkedin.com/start/join?trk=brandpage_baidu_pc-mainlink"><i class="icon-linkedin-logo"></i></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="header-container_wrap container">
+		<div class="header-container__flex">
+			<div class="logo">
+                <!--换成我们的logo-->
+				<a ><img src="{% static 'assets/images/team_logo.png' %}"></a>
+			</div>
+			<div class="social-list">
+{#				<span class="social-list__text">联系我们:</span>#}
+{#				<ul class="social-list__icons">#}
+{#					<li><a href="https://www.facebook.com/"><i class="icon-facebook-logo"></i></a></li>#}
+{#					<li><a href="https://twitter.com/"><i class="icon-twitter-letter-logo"></i></a></li>#}
+{#					<li><a href="https://google.com/"><i class="icon-google-plus"></i></a></li>#}
+{#					<li><a href="https://www.linkedin.com/start/join?trk=brandpage_baidu_pc-mainlink"><i class="icon-linkedin-logo"></i></a></li>#}
+{#				</ul>#}
+
+
+			</div>
+			<div class="phone_block">
+				<span><i class="icon-telephone"></i> 023-6510-6523</span>
+				<small>我们的联系电话</small>
+			</div>
+		</div>
+	</div>
+	<div class="header-navigation-wrap stickUp">
+		<!-- Navbar fixed top -->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="menu-navigation navbar-collapse collapse">
+
+				<!-- Left nav -->
+					<ul class="menu-navigation__list nav navbar-nav">
+					</ul>
+
+				</div><!--/.nav-collapse -->
+			</div><!--/.container -->
+		</div>
+	</div>
+
+</header>
+<!-- // Header -->
+<!-- Content  -->
+<main id="page-content" style="background: #f6f6fc">
+	<!-- Slider -->
+	<div class="slider-wrapper theme-default">
+		<div id="slider" class="nivoSlider">
+			<img src="{% static 'assets/images/slider/slide_1.jpg' %}" title="#htmlcaption1" data-thumb="assets/images/slider/slide_1.jpg" alt="" />
+			<img src="{% static 'assets/images/slider/slide_2.jpg' %}" title="#htmlcaption2" data-thumb="assets/images/slider/slide_2.jpg" alt="" />
+			<img src="{% static 'assets/images/slider/slide_3.jpg' %}" title="#htmlcaption3" data-thumb="assets/images/slider/slide_3.jpg" alt="" />
+		</div>
+        <!--三个切换动画，每个动画简单写几句宣传标语-->
+      <div id="htmlcaption1" class="nivo-caption">
+         <div class="nivo-caption__inner">
+            <div class="text">
+               <h1 class="showtext showtext__h1">专业的<br>二手车<br> 数据分析平台</h1>
+{#             <span class="showtext showtext__link"><a>Start your travel planning here!</a></span>#}
+                    <span class="showtext showtext__link"><a>为您提供舒适的服务</a></span>
+            </div>
+         </div>
+      </div>
+      <div id="htmlcaption2" class="nivo-caption">
+         <div class="nivo-caption__inner left-side">
+            <div class="text">
+               <h1 class="showtext showtext__h1">致力于<br>精准的<br>二手车数据分析</h1>
+               <span class="showtext showtext__link"><a>高端 &amp; 极致</a></span>
+            </div>
+         </div>
+      </div>
+      <div id="htmlcaption3" class="nivo-caption">
+         <div class="nivo-caption__inner">
+            <div class="text">
+                    <!--仿照前面写一个宣传标语-->
+               <h1 class="showtext showtext__h1">您身边的<br>二手车数据分析<br>专家</h1>
+               <span class="showtext showtext__link"><a >服务不二手，动力原一流</a></span>
+            </div>
+         </div>
+      </div>
+   </div>
+	<!-- Slider -->
+
+	<div class="book-form-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+                    <!-- 可能需要修改-->
+					<form id="book-form" class="book-form" action="#">
+						<span class="book-form__title">
+							您好！
+                            <br>
+                            想看哪款车？
+						</span>
+						<div class="book-form__block-select">
+							<div class="inner-block">
+								<div class="book-form__text">请选择您想了解的品牌</div>
+                                <div class="dropdown">
+            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#"
+               href="javascript:;" style="background-color: darkblue">
+                --请选择-- <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="javascript:jumpToCarInfo('奥迪');">奥迪</a></li>
+                <li><a href="javascript:jumpToCarInfo('宝马');">宝马</a></li>
+                <li><a href="javascript:jumpToCarInfo('保时捷');">保时捷</a></li>
+                <li><a href="javascript:jumpToCarInfo('奔驰');">奔驰</a></li>
+                <li><a href="javascript:jumpToCarInfo('别克');">别克</a></li>
+                <li><a href="javascript:jumpToCarInfo('大众');">大众</a></li>
+                <li><a href="javascript:jumpToCarInfo('福特');">福特</a></li>
+                <li><a href="javascript:jumpToCarInfo('马自达');">马自达</a></li>
+                <li><a href="javascript:jumpToCarInfo('荣威');">荣威</a></li>
+                <li><a href="javascript:jumpToCarInfo('雪佛兰');">雪佛兰</a></li>
+                <li class="divider"></li>
+            </ul>
+        </div>
+
+
+{#								<select class="select1" name="车名">#}
+{#									<option disabled>车名</option>#}
+{#                                    <option value="奥迪">奥迪</option>#}
+{#                                    <option value="宝马">宝马</option>#}
+{#                                    <option value="保时捷">保时捷</option>#}
+{#                                    <option value="奔驰">奔驰</option>#}
+{#									<option value="别克">别克</option>#}
+{#									<option value="大众">大众</option>#}
+{#                                    <option value="福特">福特</option>#}
+{#                                    <option value="马自达">马自达</option>#}
+{#                                    <option value="荣威">荣威</option>#}
+{#                                    <option value="雪佛兰">雪佛兰</option>#}
+{#								</select>#}
+							</div>
+						</div>
+{#						<div class="book-form__btn">#}
+{#							<input type="submit" class="btn" data-remodal-target="modal" value="确定">#}
+{#						</div>#}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+	<div class="chartsbox">
+
+            <div class="row row-margin-top row-margin-side1">
+                <div class="col-md-12">
+                    <div class="panel panel-success">
+                            
+                            <div id="main"  style="width: 1120px; height: 700px" align = "center"></div>
+                                <script type="text/javascript" charset="gbk">
+                                    
+                                    $.get('../../static/hello.json',function(data){
+                                        {% comment %} var hh = data; {% endcomment %}
+                                        console.log(data);
+                                        var dataout = data;
+                                        onload = function () {
+                                            var data = { value: dataout }
+                                            
+                                            var myChart0 = echarts.init(document.getElementById('main'));
+                                            
+                                            var maskImage = new Image();
+                                            maskImage.src = '../../static/images/car9.png'
+                            
+                                            maskImage.onload = function () {
+
+                                                myChart0.setOption({
+                                                    backgroundColor: '#fff',
+                                                    tooltip: {
+                                                        show: false
+                                                    },
+                                                    title: {
+                                                        text: '汽车型号词云图',
+                                                        textStyle:{
+                                                            fontFamily:'sans-serif',
+                                                            fontSize:48
+                                                        },
+                                                        subtext:'型号销售量越多,则字体越大',
+                                                        subtextStyle:{
+                                                            fontFamily:'sans-serif',
+                                                            fontSize:28
+                                                        },                                                       
+                                                        
+                                                        left:'center',
+                                                        top:'9%'
+                                                    },
+                                                    grid:{
+                                                        left:'center',
+                                                        bottom:'0%'
+                                                    },
+                                                    series: [{
+                                                            
+                                                            type: 'wordCloud',
+                                                            gridSize: 1,
+                                                            sizeRange: [10, 100],
+                                                            rotationRange: [-45, 0, 45, 90],
+                                                            maskImage: maskImage,
+                                                            textStyle: {
+                                                                normal: {
+                                                                    color: function () {
+                                                                        return 'rgb(' +
+                                                                                Math.round(Math.random() * 255) +
+                                                                                ', ' + Math.round(Math.random() * 255) +
+                                                                                ', ' + Math.round(Math.random() * 255) + ')'
+                                                                    }
+                                                                }
+                                                            },
+                                                            left: 'center',
+                                                            {% comment %} top: 'center', {% endcomment %}
+                                                            right: 'center',
+                                                            bottom: '0%',
+                                                            data: data.value
+                                                        }]
+                                                })
+                                            }
+                            
+                                        }
+                                    })
+                                </script>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+			<div class="row row-margin-top row-margin-side1">
+                <div class="col-md-6 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" align="center" style="background: transparent">
+                            <span class="chartTitle">各品牌车辆保值率排行榜</span>
+                        </div>
+                        <div class="panel-body">
+                            <table class="mt" align="center">
+                            <thead>
+                                <tr>
+                                    {% for x in title %}
+                                    <td>{{x}}</td>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for x in table %}
+                                    <tr>
+                                    {% for y in x %}
+                                        <td>{{ y }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--雷达图-->
+                <div class="col-md-6 col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div id="main2" style="width: 600px;height:433px;"></div>
+                            	<script>
+                                    {#var data1 = {{ class1 }}#}
+                                    var myChart2=echarts.init(document.getElementById('main2'))
+                                    var option = {
+                                title: {
+                                    text: '二手车特征分析'
+                                },
+                                tooltip: {},
+                                legend: {
+                                    data: ['第一类'+'{{ class_num1 }}'+'辆', '第二类'+'{{ class_num2 }}'+'辆',
+                                        '第三类'+'{{ class_num3 }}'+'辆','第四类'+'{{ class_num4 }}'+'辆'],
+                                    bottom: 'bottom'
+                                },
+                                radar: {
+                                    // shape: 'circle',
+                                    name: {
+                                        textStyle: {
+                                            color: '#fff',
+                                            backgroundColor: '#999',
+                                            borderRadius: 3,
+                                            padding: [3, 5]
+                                        }
+                                    },
+                                    indicator: [
+                                        { name: '里程数', max: 8},
+                                        { name: '二手价', max: 200},
+                                        { name: '原价', max: 300},
+                                        {#{ name: '款式', max: 2017},#}
+                                        { name: '车龄', max: 8},
+                                        { name: '保值率', max: 1}
+                                    ]
+                                },
+                                series: [{
+                                    name: '二手车特征分析',
+                                    type: 'radar',
+                                    {#areaStyle: {normal: {}},#}
+                                    data: [
+                                        {
+                                            value: {{ class1 }},
+                                            name: '第一类'+'{{ class_num1 }}'+'辆'
+                                        },
+                                        {
+                                            value: {{class2}},
+                                            name: '第二类'+'{{ class_num2 }}'+'辆'
+                                        },
+                                        {
+                                            value: {{class3}},
+                                            name: '第三类'+'{{ class_num3 }}'+'辆'
+                                        },
+                                        {
+                                            value: {{class4}},
+                                            name: '第四类'+'{{ class_num4 }}'+'辆'
+                                        },
+                                    ]
+                                }]
+                            };
+                                    myChart2.setOption(option);
+                                </script>
+                        </div>
+
+                    </div>
+                </div>
+			</div>
+        <div class="row row-margin-top row-margin-side2">
+            <div class="col-md-6 col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+{#                        <table>#}
+{#                        <tr>#}
+{#                            <th><div id="main1" style="width: 600px;height:300px;"></div></th>#}
+{#                        </tr>#}
+{#                        </table>#}
+                        <div id="main1" style="width: 600px;height:300px;"></div>
+                            <script>
+                                var chart1 = document.getElementById('main1');
+                                {#var resizeChart = function () {#}
+                                {#    chart1.style.width = window.innerWidth+'px';#}
+                                {#    chart1.style.height = window.innerHeight+'px';#}
+                                    {#resizeChart()#}
+                                var myChart1 = echarts.init(document.getElementById('main1'));
+
+                                var option = {
+                                    color: ['#3398DB'],
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                        }
+                                    },
+                                    title: {
+                                        text: '各品牌车辆购买均价图',
+                                        left: 'center',
+                                        top: 20,
+                                        textStyle: {
+                                            color: '#000000'
+                                        }
+                                    },
+
+                                    grid: {
+                                        left: '3%',
+                                        right: '4%',
+                                        bottom: '3%',
+                                        containLabel: true
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            data: ['别克', '大众', '奔驰', '宝马', '奥迪', '福特', '雪佛兰', '保时捷', '马自达', '荣威'],
+                                            axisTick: {
+                                                alignWithLabel: true
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '价格(万元)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '均价',
+                                            type: 'bar',
+                                            barWidth: '60%',
+                                            data: {{ avg_price }}
+                                        }
+                                    ]
+                                };
+                                // 使用刚指定的配置项和数据显示图表。
+                                window.onresize = function() {
+                                    myChart.resize();
+                                }
+                                myChart1.setOption(option);
+
+                                {#$('.chart').resize(function(){#}
+                                {#    myChartx.resize();#}
+                        {#window.onresize = function () {#}
+                        {#    //重置容器高宽#}
+                        {#    myChart1.resize();}#}
+                            </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table>
+                        <tr>
+                            <th><div id="main4" style="width: 600px;height:300px;"></div></th>
+                        </tr>
+                        </table>
+                        <script>
+                        var car_num = {{ car_num }};
+                        {#var brand = {{ brand }};#}
+                        var myChart4=echarts.init(document.getElementById('main4'))
+                        var option  = {
+                        backgroundColor: '#ffffff',
+
+                        title: {
+                            text: '各品牌销售量占比图',
+                            left: 'center',
+                            top: 20,
+                            textStyle: {
+                                color: '#000000'
+                            }
+                        },
+
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+
+                        visualMap: {
+                            show: false,
+                            min: 80,
+                            max: 1500,
+                            inRange: {
+                                     colorLightness: [0, 1]
+                            },
+                        },
+                        series: [
+                            {
+                                name: '销售量',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '50%'],
+                                data: [
+                                    {value: car_num[0], name: '别克'},
+                                    {value: car_num[1], name: '大众'},
+                                    {value: car_num[2], name: '奔驰'},
+                                    {value: car_num[3], name: '宝马'},
+                                    {value: car_num[4], name: '奥迪'},
+                                    {value: car_num[5], name: '福特'},
+                                    {value: car_num[6], name: '雪佛兰'},
+                                    {value: car_num[7], name: '保时捷'},
+                                    {value: car_num[8], name: '马自达'},
+                                    {value: car_num[9], name: '荣威'},
+                                ].sort(function (a, b) { return a.value - b.value; }),
+                                {#roseType: 'radius',#}
+                                label: {
+                                    color: '#000000'
+                                },
+                                labelLine: {
+                                    lineStyle: {
+                                        color: '#000000'
+                                    },
+                                    smooth: 0.2,
+                                    length: 10,
+                                    length2: 20
+                                },
+                                itemStyle: {
+                                    color: '#c22a35',
+                                    shadowBlur: 200,
+                                    shadowColor: 'rgba(0, 0, 0, 0)'
+                                },
+
+                                animationType: 'scale',
+                                animationEasing: 'elasticOut',
+                                animationDelay: function (idx) {
+                                    return Math.random() * 200;
+                                }
+                            }
+                        ]
+                    };
+                            // 使用刚指定的配置项和数据显示图表。
+                            myChart4.setOption(option);
+                    </script>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+
+
+</main>
+<!-- // Content  -->
+<!-- Footer -->
+<footer class="site-footer">
+    <section class="car-info-box" data-wow-duration="0.5s" data-wow-delay="0.5s">
+		<div class="car-info-box__description">
+			<div class="desc-inner">
+				<h1>江流有声二手车大数据分析平台</h1>
+				<span class="text-link">致力于为您提供<b style="color: orangered">最优质</b>的二手车数据分析服务</span>
+				<p>
+                    本平台是基于互联网数据的二手车大数据分析平台，我们坚持使用最权威的数据，为您提供最精准的二手车数据分析服务。
+                    服务不二手，动力原一流！江流有声，做您身边的二手车数据分析专家！
+                </p>
+			</div>
+		</div>
+		<figure class="car-info-box__thumb has-second-img">
+			<img src="{% static 'assets/images/car_hire.jpg' %}" alt="" class="first-fade">
+			<img src="{% static 'assets/images/car_hire1.jpg' %}" alt="" class="second-fade">
+		</figure>
+	</section>
+	<section  class="box-elements">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-lg-3">
+                    <!--换成我们的logo-->
+					<figure class="footer_logo"><a><img src="{% static 'assets/images/logo_down2.png' %}" alt="" width="200"></a></figure>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<h5>团队</h5>
+                    <li><a href="https://www.cqu.edu.cn/">关于我们</a></li>
+                    <li><a href="http://www.cs.cqu.edu.cn/">联系我们</a></li>
+					<ul class="footer-list">
+					</ul>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<h5>客户服务</h5>
+					<ul class="footer-list">
+						<li><a href="https://www.baidu.com/">问答</a></li>
+						<li><a href="https://www.baidu.com/">帮助</a></li>
+						<li><a href="https://www.autohome.com.cn/chongqing/">友情链接</a></li>
+					</ul>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<div class="contact-info">
+						<span class="phone_number"><i class="icon-telephone"></i> 023-6510-6523</span>
+
+						<span class="location_info">
+						<i class="icon-placeholder-for-map"></i>
+						<em>重庆市沙坪坝区,</em>
+						<em>大学城中路,</em>
+						<em>虎溪校区</em> </span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="site-footer__bottom-panel">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<div class="copyright">Copyright &copy; 2020.江流有声 All rights reserved.<a target="_blank" href="http://www.cqu.edu.cn/">重庆大学</a></div>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="social-list">
+						<ul class="social-list__icons">
+							<li><a href="https://www.facebook.com/"><i class="icon-facebook-logo"></i></a></li>
+							<li><a href="https://twitter.com/"><i class="icon-twitter-letter-logo"></i></a></li>
+							<li><a href="https://google.com/"><i class="icon-google-plus"></i></a></li>
+							<li><a href="https://www.linkedin.com/start/join?trk=brandpage_baidu_pc-mainlink"><i class="icon-linkedin-logo"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<a href="#" class="scrollup"><i class="icon-arrow-down-sign-to-navigate"></i></a>
+</footer>
+
+<!-- //Footer -->
+<script src="{% static 'assets/js/jquery.1.12.4.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/wow.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/jquery.smartmenus.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/jquery.smartmenus.bootstrap.js' %}"></script>
+<script src="{% static 'assets/js/plugins/jquery.nivo.slider.js' %}"></script>
+<script src="{% static 'assets/js/plugins/swiper.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/intlTelInput.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/remodal.js' %}"></script>
+<script src="{% static 'assets/js/plugins/stickup.min.js' %}"></script>
+<script src="{% static 'assets/js/custom.js' %}"></script>
+<script src="{% static 'assets/js/jquery.ba-resize.min.js' %}"></script>
+
+</body>
+</html>

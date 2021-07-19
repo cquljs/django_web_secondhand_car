@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--浏览器兼容性判断，为了保证各浏览器能够顺利浏览网页而做的完善措施，重点是对html5兼容性不好的IE浏览器版本号做判断-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!--如果版本号小于IE7 不启用js-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!--如果版本号是IE7-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!--如果版本号是IE8-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]--><!--IE9开始逐渐支持部分HTML5标准：如果版本号是IE9-->
+    <head>
+        <!--将static文件加载进来-->
+
+        {% load static %}
+        <!--网页图标加载-->
+        <link rel="shortcut icon" href="{% static 'images/logo1.ico' %}">
+
+        <!--字符集-->
+        <meta charset="utf-8">
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+
+        <!--网页标题， brand获取POST传入的品牌名称-->
+        <title>车型分析结果</title>
+    	<meta name="keywords" content="" />
+		<meta name="description" content="" />
+        <!--自适应网页尺寸，根据device-width适配-->
+        <meta name="viewport" content="width=device-width">
+        <!-- Google 网页字库加载 -->
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,600,500,300,700' rel='stylesheet' type='text/css'>
+        <!--样式表加载-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/templatemo_main.css' %}">
+
+
+        <!--下拉框样式设置-->
+
+        <script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+        <link rel="stylesheet" href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css"/>
+        <script type="text/javascript" src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+{#        <script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>#}
+{#        <link rel="stylesheet" href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css"/>#}
+{#        <script type="text/javascript" src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>#}
+        <style type="text/css">
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .footer-text{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            z-index: 10;
+        }
+
+
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -6px;
+            margin-left: -1px;
+            -webkit-border-radius: 0 6px 6px 6px;
+            -moz-border-radius: 0 6px 6px;
+            border-radius: 0 6px 6px 6px;
+        }
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+        .dropdown-submenu > a:after {
+            display: block;
+            content: " ";
+            float: right;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 5px 0 5px 5px;
+            border-left-color: #ccc;
+            margin-top: 5px;
+            margin-right: -10px;
+        }
+        .dropdown-submenu:hover > a:after {
+            border-left-color: #fff;
+        }
+        .dropdown-submenu.pull-left {
+            float: none;
+        }
+        .dropdown-submenu.pull-left > .dropdown-menu {
+            left: -100%;
+            margin-left: 10px;
+            -webkit-border-radius: 6px 0 6px 6px;
+            -moz-border-radius: 6px 0 6px 6px;
+            border-radius: 6px 0 6px 6px;
+        }
+
+        </style>
+
+        <script>
+/*
+        function showCarInfo(str) {
+            var xmlhttp;
+            var formData = new FormData();
+            if (str == "") {
+                return;
+            }
+            if (window.XMLHttpRequest) {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			    document.getElementById("tables").innerHTML=xmlhttp.responseText;
+		    }
+            formData.append('brandname', str);
+            xmlhttp.open("POST", "/app/details/", true);
+            xmlhttp.send(formData);
+        }
+*/
+/*
+        function showCarInfo(str) {
+            var formData = new FormData();
+            formData.append('brandname', str);
+            //alert(formData.get('brandname'));
+            $('#main-wrapper').load("/app/details/",formData);
+        }
+*/
+
+        function showCarInfo(str) {
+            $.ajax({
+                type: "POST",
+                url: "/app/detailsUpdate/title/",
+                async: true,
+                dataType: "html",
+                data: {'brandname':str},
+                success: function(data){
+                    $("#bigTitle").html(data); <!--更新标题-->
+                },
+                error:function(err){
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "/app/detailsUpdate/tables/",
+                async: true,
+                dataType: "html",
+                data: {'brandname':str},
+                success: function(data){
+                    $("#tables").html(data); <!--更新图表-->
+                },
+                error:function(err){
+                }
+            });
+        }
+
+        </script>
+
+
+
+    </head>
+    <!--主体-->
+    <body>
+        <!--使用wrapper，将模块打包-->
+
+        <div id="main-wrapper">
+            <!--如果是浏览器小于IE7，则展示浏览器兼容提示，要求更换浏览器以获得更好的体验。-->
+            <!--[if lt IE 7]>
+                <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a rel="nofollow" href="http://browsehappy.com">upgrade your browser</a> or <a rel="nofollow" href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+            <![endif]-->
+
+{#                       <p>　　</p> <a href="https://www.baidu.com/"> <button class="btn btn-primary">返回首页</button></a>#}
+{##}
+{#                    <div class="dropdown">#}
+{#                        <p>     </p>#}
+{#                        <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#"#}
+{#                           href="javascript:;">#}
+{#                            现在还想看哪款车？ <span class="caret"></span>#}
+{#                        </a>#}
+{#                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">#}
+{#                            <li><a href="javascript:;">奥迪</a></li>#}
+{#                            <li><a href="javascript:;">宝马</a></li>#}
+{#                            <li><a href="javascript:;">保时捷</a></li>#}
+{#                            <li><a href="javascript:;">奔驰</a></li>#}
+{#                            <li><a href="javascript:;">别克</a></li>#}
+{#                            <li><a href="javascript:;">大众</a></li>#}
+{#                            <li><a href="javascript:;">丰田</a></li>#}
+{#                            <li><a href="javascript:;">福特</a></li>#}
+{#                            <li><a href="javascript:;">马自达</a></li>#}
+{#                            <li><a href="javascript:;">荣威</a></li>#}
+{#                            <li class="divider"></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+
+{#            <p>  </p><a href="https://www.baidu.com/"> <button class="btn btn-primary">返回首页</button></a>#}
+            <!--采用bootstrap栅栏布局，col-lg:大屏设备，col-md:中屏设备，col-sm:小屏设备,col-xs:max-width<=768px小型设备-->
+            <!--内容居中显示:text-center-->
+
+
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 affix text-center" style="z-index: 1;">
+
+                <h1 class="templatemo-site-title">
+
+                        <!--居中大标题，字号h1-->
+                        <a>
+						<div id="bigTitle">
+                        {% include 'bigTitle.html' %}
+                        </div>
+					</a>
+                        <!--如果当前页面窗口过小，则显示菜单按钮-->
+                        <img src="{% static 'images/btn-menu.png' %}" alt="main menu" id="m-btn" class="pull-right visible-xs visible-sm" >
+                </h1>
+
+                <ul id="responsive" style="display:none" class="hidden-lg hidden-md"></ul><!-- /.responsive -->
+            </div>
+
+
+
+            <div class="menu visible-md visible-lg" >
+
+
+                <p>　　</p> <a href="/app/index/"> <button class="btn btn-primary" style="background-color: #1A478B">返回首页</button></a>
+
+                    <div class="dropdown">
+
+                        <p>     </p>
+                        <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#"
+                           href="javascript:;" style="background-color: #1A478B" >
+                            现在还想看哪款车？ <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            <li><a href="javascript:showCarInfo('奥迪');">奥迪</a></li>
+                            <li><a href="javascript:showCarInfo('宝马');">宝马</a></li>
+                            <li><a href="javascript:showCarInfo('保时捷');">保时捷</a></li>
+                            <li><a href="javascript:showCarInfo('奔驰');">奔驰</a></li>
+                            <li><a href="javascript:showCarInfo('别克');">别克</a></li>
+                            <li><a href="javascript:showCarInfo('大众');">大众</a></li>
+                            <li><a href="javascript:showCarInfo('福特');">福特</a></li>
+                            <li><a href="javascript:showCarInfo('马自达');">马自达</a></li>
+                            <li><a href="javascript:showCarInfo('荣威');">荣威</a></li>
+                            <li><a href="javascript:showCarInfo('雪佛兰');">雪佛兰</a></li>
+                            <li class="divider"></li>
+                        </ul>
+
+
+                    </div>
+
+
+                <br>
+                <br>
+                <br>
+                <br>
+                <ul id="menu-list" >
+                    <!--菜单栏-->
+                    <li class="active home-menu"><a href="#home">价格区间分析</a></li>
+                    <li class="about-menu"><a href="#about">车辆车龄分布比率的分析</a></li>
+                    <li class="services-menu"><a href="#services">出厂年份与卖出量的分析</a></li>
+                    <li class="testimonial-menu"><a href="#testimonial">保值率分析</a></li>
+                    <li class="contact-menu"><a href="#contact">关于团队</a></li>
+                </ul>
+
+
+            </div><!-- /.menu -->
+
+            <!--下拉框-->
+
+
+{#                <p>  </p><a href="https://www.baidu.com/" >&emsp;&ensp;&emsp;&ensp;&emsp;  <button class="btn btn-primary">返回首页</button></a>#}
+
+            <div class="image-section">
+                <div class="image-container">
+                    <!--每个菜单栏点击后的背景图-->
+                    <img src="{% static 'images/car1.jpg' %}" id="home-img" class="main-img inactive" alt="Home">
+                    <img src="{% static 'images/car6.jpg' %}" id="about-img" class="inactive" alt="About">
+                    <img src="{% static 'images/car3.jpg' %}" id="services-img"  class="inactive" alt="Services">
+                    <img src="{% static 'images/car4.jpg' %}" id="testimonial-img" class="inactive" alt="Testimonial">
+                    <img src="{% static 'images/car5.jpg' %}" id="contact-img" class="inactive" alt="Contact">
+                </div>
+            </div>
+            <!--注意，控件的具体颜色方案，在templatemo_main.css里设置-->
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-lg-offset-6 col-md-offset-6 templatemo-content-wrapper">
+                    <div class="templatemo-content">
+
+                        <div id="tables">
+                            {% include 'tables.html' %}
+                        </div>
+
+{#                        <section id="contact-text" class="inactive">#}
+{#                            <div class="col-sm-12 col-md-12">#}
+{#                                <div class="row">#}
+{#                                    <div class="col-sm-12 col-md-12"><h2 style="font-family: 'Times New Roman';color: black;font-size: 30px">About Team</h2></div>#}
+{#                                    <div class="clearfix"></div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="row">#}
+{#                                    <!--底部-->#}
+{#                                    <div class="col-sm-12 col-md-12">#}
+{#                                        <p><b style="color: black">项目概述：</b><a style="color: black">江流有声二手车大数据分析平台由重庆大学计算机学院2018级本科生江流有声团队完成，#}
+{#                                            <b style="color: gold">我们致力于为用户提供多元的二手车分析数据</b>。其中使用到的图片素材、css和js素材归原作者所有。</a></p>#}
+{#                                        <br>#}
+{#                                        <p ><b style="color: black">团队成员：</b><a style="color: black">甘雁、刘建铄、董瀚文、潘振宇、王先吉、袁正、储瑾辰、陈适航</a></p>#}
+{#                                        <p><b style="color: black">数据支持：</b><a style="color: black">服务器和数据库平台由阿里云提供支持。</a></p>#}
+{#                                        #}
+{#                                    </div>#}
+{##}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </section><!-- /.contact-text -->#}
+                    </div><!-- /.templatemo-content -->
+                </div><!-- /.templatemo-content-wrapper -->
+            </div><!-- /.row -->
+                         <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer">
+                    <p class="footer-text">
+                    	<span>Copyright &copy; 2020 江流有声</span>
+                        <br>
+                        <span>特别感谢指导老师：赵雷的web教程</span>
+                	</p>
+                </div><!-- /.footer -->
+            </div>
+
+
+	</div><!-- /#main-wrapper -->
+
+        <div id="preloader">
+            <div id="status">&nbsp;</div>
+        </div><!-- /#preloader -->
+        <!--js文件加载部分-->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/jquery.backstretch.min.js' %}"></script>
+        <script src="{% static 'js/templatemo_script.js' %}"></script>
+
+    </body>
+</html>
